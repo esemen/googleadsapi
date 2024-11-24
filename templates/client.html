@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Google Ads API Interface</h2>
+{% if customer %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Account</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Currency</th>
+                    <th>Time Zone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in customer %}
+                <tr>
+                    <td>{{ account['Customer ID'] }}</td>
+                    <td>{{ account['Name'] }}</td>
+                    <td>{{ account['Currency'] }}</td>
+                    <td>{{ account['Time Zone'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if errors %}
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Error</h4>
+    <p>{{ errors }}</p>
+</div>
+{% endif %}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Campaigns</h4>
+        <div class="list-group">
+            {% for campaign in campaigns %}
+                {% set info = campaign['info'] %}
+                {% set metrics = campaign['metrics'] %}
+                {% set budget = campaign['budget'] %}
+
+            <div class="list-group-item list-group-item-action">
+                <div class="row">
+                    <div class="col-md-6">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ info['name'] }}</h5>
+                    <small class="text-muted">ID: {{ info['id'] }}</small>
+                </div>
+                <p class="mb-1">Status:
+                    <span class="badge
+                        {% if info['status'].name == 'ENABLED' %}
+                            bg-success
+                        {% elif info['status'].name == 'PAUSED' %}
+                            bg-warning
+                        {% else %}
+                            bg-secondary
+                        {% endif %}">
+                        {{ info['status'].name }}
+                    </span>
+                </p>
+                <small>Channel: {{ info['advertising_channel_type'].name }}</small><br>
+                <small>Serving Status: {{ info['serving_status'].name }}</small><br>
+                <small>Start: {{ info['start_date'] }} | End: {{ info['end_date'] }}</small>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="mb-1 fw-bold">Metrics:</p>
+                        <small>Impressions: {{ metrics['impressions'] }}</small><br>
+                        <small>Clicks: {{ metrics['clicks'] }}</small><br>
+                        <small>CTR: {{ metrics['ctr'] }}</small><br>
+                        <small>Average CPC: {{ metrics['average_cpc'] }}</small><br>
+                        <small>Conversions: {{ metrics['all_conversions'] }}</small><br>
+                        <small>Cost: £{{ metrics['cost_micros'] / 1e6 }}</small>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="mb-1 fw-bold">Budget:</p>
+                        <small>Amount: £{{ budget['amount_micros'] / 1e6 }}</small><br>
+                        <small>Delivery Method: {{ budget['delivery_method'].name }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not campaigns %}
+            <div class="list-group-item list-group-item-action">
+                <p class="mb-1">No campaigns found.</p>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

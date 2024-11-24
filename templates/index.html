@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Google Ads API Interface</h2>
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Manager Account</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Currency</th>
+                <th>Time Zone</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for account in manager_accounts %}
+            <tr>
+                <td>{{ account['Customer ID'] }}</td>
+                <td>{{ account['Name'] }}</td>
+                <td>{{ account['Currency'] }}</td>
+                <td>{{ account['Time Zone'] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Clients</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Currency</th>
+                <th>Time Zone</th>
+                <th class="text-center">Manager</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for account in customers %}
+            <tr>
+                <td>{{ account['id'] }}</td>
+                <td>
+                    {% if account['manager'] %}
+                    {{ account['descriptive_name'] }}
+                    {% else %}
+                    <a href="/account/{{ account['id'] }}">{{ account['descriptive_name'] }}</a>
+                    {% endif %}
+                </td>
+                <td>{{ account['currency_code'] }}</td>
+                <td>{{ account['time_zone'] }}</td>
+                <td class="text-center">{% if account['manager'] %}✔{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

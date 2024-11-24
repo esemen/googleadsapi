@@ -1,0 +1,5 @@
+.idea
+.venv
+config/google-ads.yaml
+credentials.json
+oauthresponse.json
